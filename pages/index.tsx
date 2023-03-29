@@ -64,6 +64,7 @@ const Home: NextPage = () => {
       const { value, done: doneReading } = await reader.read();
       done = doneReading;
       const chunkValue = decoder.decode(value);
+      console.log(chunkValue);
       setGeneratedBios((prev) => prev + chunkValue);
     }
     scrollToBios();
