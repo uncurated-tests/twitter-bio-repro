@@ -55,7 +55,9 @@ export async function OpenAIStream(payload: OpenAIStreamPayload) {
             }
 
             try {
+              console.log("parsing data: ", data);
               const json = JSON.parse(data);
+              console.log("succesfully parsed data: ", json);
               const text = json.choices[0].delta?.content || "";
               fullResponse += text;
               if (fullResponse.length > 20) {
