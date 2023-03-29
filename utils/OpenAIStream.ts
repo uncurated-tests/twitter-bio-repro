@@ -24,12 +24,7 @@ export interface OpenAIStreamPayload {
   n: number;
 }
 
-export async function OpenAIStream(
-  payload: OpenAIStreamPayload,
-  domains: string[] = [],
-  req: NextRequest,
-  ev: NextFetchEvent
-) {
+export async function OpenAIStream(payload: OpenAIStreamPayload) {
   const encoder = new TextEncoder();
   const decoder = new TextDecoder();
 
