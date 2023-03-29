@@ -60,7 +60,7 @@ export async function OpenAIStream(payload: OpenAIStreamPayload) {
               console.log("succesfully parsed data: ", json);
               const text = json.choices[0].delta?.content || "";
               fullResponse += text;
-              if (fullResponse.length > 20) {
+              if (true) {
                 console.log("transforming response: ", fullResponse);
                 // simulate async process
                 const transformedResponse = await new Promise((resolve) =>
