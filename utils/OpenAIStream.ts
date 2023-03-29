@@ -39,10 +39,10 @@ export async function OpenAIStream(payload: OpenAIStreamPayload) {
 
   let fullResponse = "";
 
-  const readableStream = res.body;
+  const [streamA, streamB] = res.body!.tee();
 
   const transformStream = new TransformStream({
-    async transform(chunk, controller) {
+    async transform(_, controller) {
       const parser = createParser(
         async (event: ParsedEvent | ReconnectInterval) => {
           if (event.type === "event") {
@@ -60,7 +60,7 @@ export async function OpenAIStream(payload: OpenAIStreamPayload) {
               console.log("succesfully parsed data: ", json);
               const text = json.choices[0].delta?.content || "";
               fullResponse += text;
-              if (true) {
+              if (fullResponse.length > 10) {
                 console.log("transforming response: ", fullResponse);
                 // simulate async process
                 const transformedResponse = await new Promise((resolve) =>
@@ -78,10 +78,11 @@ export async function OpenAIStream(payload: OpenAIStreamPayload) {
         }
       );
 
-      // feed the chunk to the parser
-      parser.feed(decoder.decode(chunk));
+      for await (const chunks of streamB as any) {
+        parser.feed(decoder.decode(chunks));
+      }
     },
   });
 
-  return readableStream?.pipeThrough(transformStream);
+  return streamA.pipeThrough(transformStream);
 }
