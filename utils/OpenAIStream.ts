@@ -59,6 +59,7 @@ export async function OpenAIStream(payload: OpenAIStreamPayload) {
               const text = json.choices[0].delta?.content || "";
               fullResponse += text;
               if (fullResponse.length > 20) {
+                console.log("transforming response: ", fullResponse);
                 // simulate async process
                 const transformedResponse = await new Promise((resolve) =>
                   setTimeout(() => resolve(fullResponse.toUpperCase()), 1000)
